@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="/templates/main.xhtml">
+            <ui:define name="main">
+                <div class="container">
+                    <h:form>
+                        <h1>Restaurant: #{sessionScope.restaurant.getName()}</h1>
+                        <h2> Address: #{sessionScope.restaurant.getAddress()} </h2>
+                        <h:commandButton action="#" value="Edit Address" 
+                                             rendered="#{sessionScope.user.getUserType() == 'manager'
+                                                     and sessionScope.user.getRestaurant() == sessionScope.restaurant.getName()}"/>
+                        <br/><br/>
+                        <c:if test="#{sessionScope.restaurant.getDishes() != null 
+                                 and !sessionScope.restaurant.getDishes().isEmpty()}">
+                            <h2>Dishes: </h2>
+                            <ul>
+                                <ui:repeat value="#{sessionScope.restaurant.getDishes()}" var="dish">
+                                    <li>
+                                        #{dish.getName()} - $#{dish.getPrice()}
+                                        <h:commandButton action="#{restaurantBean.goToDish(sessionScope.restaurant, dish)}" value="Details"/>
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                            <br/><br/>
+                        </c:if>
+                        <h:commandButton action="#{restaurantBean.goToNewDish()}" value="Add Dish" 
+                                         rendered="#{sessionScope.user.getUserType() == 'manager'
+                                                 and sessionScope.user.getRestaurant() == sessionScope.restaurant.getName()}"/>
+                        <br/><br/><br/>
+                        <c:if test="#{sessionScope.restaurant.getManagers() != null 
+                                 and !sessionScope.restaurant.getManagers().isEmpty()}">
+                            <h3>Managers: </h3>
+                            <ui:repeat value="#{sessionScope.restaurant.getManagers()}" var="manager">
+                                    <li> #{manager} </li>
+                            </ui:repeat>
+                        </c:if>
+                        <h:commandButton action="#" value="Add Manager" 
+                            rendered="#{sessionScope.user.getUserType() == 'manager'
+                                    and sessionScope.user.getRestaurant() == sessionScope.restaurant.getName()}"/>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

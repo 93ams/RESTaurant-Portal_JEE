@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:body>
+        <ui:composition template="/templates/main.xhtml">
+            <ui:define name="main">
+                <div class="container">
+                    <h:form>
+                        <h3>New Restaurant</h3>
+                        <h:outputText value="Name: " />
+                        <h:inputText id="restaurantName" value="#{restaurantBean.restaurantName}"></h:inputText>
+                        <h:message for="restaurantName"></h:message>
+                        <br />
+                        <br />
+                        <h:outputText value="Address: " />
+                        <h:inputText id="restaurantAddress" value="#{restaurantBean.restaurantAddress}"></h:inputText>
+                        <h:message for="restaurantAddress"></h:message>
+                        <br />
+                        <br />
+                        <h:commandButton action="#{restaurantBean.createRestaurant()}" value="Register"/>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

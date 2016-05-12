@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:body>
+        <ui:composition template="/templates/main.xhtml">
+            <ui:define name="main">
+                <div class="container">
+                    <h:form>
+                        <h1>Login</h1>
+                        <h:outputText value="Username " />
+                        <h:inputText id="username" value="#{loginBean.username}"></h:inputText>
+                        <br />
+                        <br />
+                        <h:outputText value="Password " />
+                        <h:inputSecret id="password" value="#{loginBean.password}"></h:inputSecret>
+                        <br />
+                        <br />
+<!--                        <h:selectOneMenu class="bootstrap-select" value="#{loginBean.userType}">
+                            <f:selectItem itemValue="manager" itemLabel="Manager" />
+                            <f:selectItem itemValue="client" itemLabel="Client" />	   							
+                        </h:selectOneMenu>
+                        <br />
+                        <br />-->
+                        <h:commandButton action="#{loginBean.login()}"
+                            value="Login"></h:commandButton> 
+                        <h:commandButton action="register"
+                            value="Register"></h:commandButton>
+                        <h:messages errorClass="errorMessage" infoClass="infoMessage" globalOnly="true" showSummary="true"/>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

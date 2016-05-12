@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="/templates/main.xhtml">
+            <ui:define name="main">
+                <div class="container">
+                    <h:form>
+                        <h1>Dish: #{sessionScope.dish.getName()}</h1>
+                        <h3>From Restaurant: #{sessionScope.restaurant.getName()}</h3>
+                        <h3>Price: $#{sessionScope.dish.getPrice()}</h3>
+                        <c:if test="#{sessionScope.dish.getIngredients() != null 
+                                 and !sessionScope.dish.getIngredients().isEmpty()}">
+                            <h2>Ingredients: </h2>
+                            <ul>
+                                <ui:repeat value="#{sessionScope.dish.getIngredients()}" var="ingredient">
+                                    <li>
+                                        #{ingredient.getName()} - #{ingredient.getType()}
+                                        <h:commandButton action="#" value="Remove" 
+                                            rendered="#{sessionScope.user.getUserType() == 'manager'
+                                                    and sessionScope.user.getRestaurant() == sessionScope.restaurant.getName()}"/>
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                        </c:if>
+                        <p>
+                            <h:commandButton action="#{restaurantBean.removeDish(sessionScope.restaurant, sessionScope.dish)}" value="Remove"/>
+                            <h:button outcome="#{restaurantBean.goToRestaurant(sessionScope.restaurant)}" value="Back"/>
+                        </p>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

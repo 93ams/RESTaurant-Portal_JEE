@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+        <ui:composition>
+            <nav class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header col-md-3">
+                        <a class="navbar-brand" style="font-size: 175%" href="/PortalService">RESTaurant Manager</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        
+                        <li> 
+                            <h:link value="Buy Meal Checks" 
+                                    outcome="mealchecks" 
+                                    rendered="#{sessionScope.user.getUserType() == 'client'}"/> 
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right col-md-4">
+                        <div>
+                            <h:form class="navbar-form">
+                                <c:choose>
+                                    <c:when test="#{loginBean.logged != true}">
+                                        <div class=" col-md-3">
+                                            <div class="form-group">
+                                                <h:inputText id="username" class="form-control" value="#{loginBean.username}"/>
+                                                <h:inputSecret id="password" class="form-control" value="#{loginBean.password}"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-offset-5 col-md-3">
+                                            <h:commandButton class="btn-xs pull-right" style="width: 80px" action="#{loginBean.login()}" value="Login"></h:commandButton> 
+                                            <h:commandButton class="btn-xs pull-right" style="width: 80px" action="register.xhtml" value="Register"></h:commandButton>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h:commandButton class="btn pull-right" action="#{loginBean.logout()}" value="Logout"></h:commandButton> 
+                                    </c:otherwise>
+                                </c:choose>
+                            </h:form>
+                        </div>
+                    </ul>
+                </div>
+            </nav>
+        </ui:composition>
+    </body>
+</html>

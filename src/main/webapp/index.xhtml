@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="/templates/main.xhtml">
+            <ui:define name="main">
+                <div class="container">
+                    <h1>RESTaurant Manager</h1>
+                    <c:if test="#{loginBean.logged == true}">
+                        <h1>Welcome #{sessionScope.user.getName()}</h1>
+                    </c:if>
+                    <c:if test="#{restaurantBean.getRestaurants() != null and !restaurantBean.getRestaurants().isEmpty()}">
+                        <h1>Restaurants: </h1>
+                        <h:form>
+                            <ul>
+                                <ui:repeat value="#{restaurantBean.getRestaurants()}" var="restaurant">
+                                    <li>
+                                        #{restaurant.getName()} @ #{restaurant.getAddress()}
+                                        <h:commandButton action="#{restaurantBean.goToRestaurant(restaurant)}" value="Details" 
+                                                         rendered="#{sessionScope.user != null}"/>
+                                        <h:outputText value=" Yours" rendered="#{sessionScope.user.getUserType() == 'manager' 
+                                                                             and sessionScope.user.getRestaurant() == restaurant.getName()}" />
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                            <h:commandButton action="#{restaurantBean.goToNewRestaurant()}" value="Register your Restaurant" 
+                                             rendered="#{sessionScope.user.getUserType() == 'manager'
+                                                     and sessionScope.user.getRestaurant() == null}"/>
+                        </h:form>
+                    </c:if>
+                    <c:choose>
+                        <c:when test="#{loginBean.logged == true}">
+                            <!--<c:if test="">Register <a href="#">here</a> your restaurant.</c:if>-->
+                        </c:when>
+                        <c:otherwise>
+                            <p><a href="login.xhtml">LogIn</a> or <a href="register.xhtml">register</a> to add your restaurant or to buy some sweet meals!</p>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="/templates/main.xhtml">
+            <ui:define name="main"> 
+                <div class="container">
+                    <h:form>
+                        <h3>Register #{loginBean.userType}</h3>
+                        <h:outputText value="Username " />
+                        <h:inputText id="username" value="#{loginBean.username}"></h:inputText>
+                        <h:message for="username"></h:message>
+                        <br />
+                        <br />
+                        <h:outputText value="Password " />
+                        <h:inputSecret id="password" value="#{loginBean.password}"></h:inputSecret>
+                        <h:message for="password"></h:message>
+                        <br />
+                        <br />
+                        <h:outputText value="Confirm Password " />
+                        <h:inputSecret id="passwordConf" value="#{loginBean.passwordConf}"></h:inputSecret>
+                        <h:message for="passwordConf"></h:message>
+                        <br />
+                        <br />
+                        <h:outputText value="Name " />
+                        <h:inputText id="name" value="#{loginBean.name}"></h:inputText>
+                        <br />
+                        <br />
+                        <c:if test="#{loginBean.userType eq 'manager'}">         
+                            <h:commandButton action="#{loginBean.toggleUserType}" value="Register as Client"/>
+                        </c:if>
+                        <c:if test="#{loginBean.userType eq 'client'}">
+                            <h:outputText value="Address " />
+                            <h:inputText id="address" value="#{loginBean.address}"></h:inputText>
+                            <h:message for="address"></h:message>
+                            <br />
+                            <br />
+                            <h:outputText value="Email " />
+                            <h:inputText id="email" value="#{loginBean.email}"></h:inputText>
+                            <h:message for="email"></h:message>
+                            <br />
+                            <br />
+                            <h:outputText value="Tax Id " />
+                            <h:inputText id="taxId" value="#{loginBean.taxId}">
+                                <f:convertNumber integerOnly="true" type="number" />
+                            </h:inputText>
+                            <h:message for="taxId"></h:message>
+                            <br />
+                            <br />
+                            <h:commandButton action="#{loginBean.toggleUserType}" value="Register as Manager"/>
+                        </c:if>
+                        <h:commandButton action="#{loginBean.register()}" value="Register">
+                        </h:commandButton>
+                        <h:messages errorClass="errorMessage" infoClass="infoMessage" globalOnly="true" showSummary="true"/>
+                    </h:form>
+                </div>
+            </ui:define>    
+        </ui:composition>
+    </h:body>
+</html>

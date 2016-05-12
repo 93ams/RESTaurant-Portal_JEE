@@ -180,7 +180,7 @@ public class RestaurantBean implements Serializable {
         }
         return "restaurant.xhtml?faces-redirect=true";
     }
-    
+                    
     public String goToNewDish(RestaurantEntity restaurant){
         try {
             UserEntity user = getSessionUser();
@@ -188,7 +188,7 @@ public class RestaurantBean implements Serializable {
                 errorMessage("Meh", "I don't know how you did this, but don't");
             } else if(!"manager".equals(user.getUserType())){
                 errorMessage("What are you doing, you are no manager", "You cannot do this dumbdumb");
-            } else if(!(restaurant == ((ManagerEntity) user).getRestaurant())){
+            } else if(!restaurant.equals(((ManagerEntity) user).getRestaurant())){
                 errorMessage("Don't get me wrong but, this is not your restaurant", "Do not missbehave silly");
             } else {
                 return "newdish.xhtml?faces-redirect=true";
@@ -196,7 +196,7 @@ public class RestaurantBean implements Serializable {
         } catch( Exception e ) {
             System.out.println("Error @ RestaurantBean: goToNewRestaurant");
             System.out.println( e.getMessage() );
-        }
+        } 
         return "index.xhtml?faces-redirect=true";
     }
     

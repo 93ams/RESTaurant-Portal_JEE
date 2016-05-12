@@ -14,9 +14,9 @@ public class ManagerEntity extends UserEntity {
                 referencedColumnName = "name")
     private RestaurantEntity restaurant;
     
-    public ManagerEntity(){ super(); }
+    public ManagerEntity(){}
     public ManagerEntity(String username, String password, String name){
-        super(username, password, name);
+        super("manager", username, password, name);
     }
     
     public RestaurantEntity getRestaurant() { return restaurant; } 

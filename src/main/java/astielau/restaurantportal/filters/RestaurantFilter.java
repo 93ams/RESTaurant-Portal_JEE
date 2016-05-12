@@ -14,8 +14,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-                                                               // *.xhtml
-@WebFilter(filterName = "RestaurantFilter", urlPatterns = { "dish.xhtml", "restaurant.xhtml", "newdish.xhtml", "newrestaurant.xhtml" })
+                                                   
+@WebFilter(filterName = "RestaurantFilter", urlPatterns = { "*.xhtml" })
 public class RestaurantFilter implements Filter {
     
     public RestaurantFilter (){}
@@ -35,6 +35,7 @@ public class RestaurantFilter implements Filter {
             
             if(reqURI.contains("/restaurant.xhtml")){
                 if(session.getAttribute("restaurant") == null){
+                    System.out.println("A");
                     res.sendRedirect(req.getContextPath() + "/index.xhtml");
                 }else{
                     chain.doFilter(request, response);
@@ -42,8 +43,10 @@ public class RestaurantFilter implements Filter {
             } else if( reqURI.contains("/dish.xhtml")){
                 if( session.getAttribute("dish") == null ){
                     if(session.getAttribute("restaurant") == null){
+                        System.out.println("B");
                         res.sendRedirect(req.getContextPath() + "/index.xhtml");
                     } else {
+                        System.out.println("C");
                         res.sendRedirect(req.getContextPath() + "/restaurant.xhtml");
                     }
                 }else{
@@ -62,7 +65,7 @@ public class RestaurantFilter implements Filter {
                 UserEntity user = (UserEntity) session.getAttribute("user");
                 RestaurantEntity restaurant = (RestaurantEntity) session.getAttribute("restaurant");
                 if(user == null || !("manager".equals(user.getUserType()))
-                || !restaurant.getName().equals(((ManagerEntity) user).getRestaurant()) ){
+                || !restaurant.equals(((ManagerEntity) user).getRestaurant()) ){
                     System.out.println("Redirecting to restaurant; User is not manager or is not of this restaurant");
                     res.sendRedirect(req.getContextPath() + "/restaurant.xhtml");
                 }else{

@@ -1,5 +1,6 @@
 package astielau.restaurantportal.entities;
 
+import astielau.restaurantportal.enums.UserTypeEnum;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,9 +16,11 @@ public class UserEntity implements Serializable {
     @Id private String username;
     private String password;
     private String name;
+    private UserTypeEnum userType;
     
     public UserEntity() {}
-    public UserEntity(String username, String password, String name) {
+    public UserEntity(String userType, String username, String password, String name) {
+        this.userType = this.convertUserType(userType);
         this.username = username;
         this.password = password;
         this.name = name;
@@ -32,6 +35,20 @@ public class UserEntity implements Serializable {
     public String getName() { return name; } 
     public void setName(String name) { this.name = name; }
     
+    public String getUserType(){ return this.userType.getType(); }
+    public void setUserType(String value){ this.userType = convertUserType(value); }
+    
+    private UserTypeEnum convertUserType(String value){
+        switch(value){
+            case "client":
+                return UserTypeEnum.CLIENT;
+            case "manager":
+                return UserTypeEnum.MANAGER;
+            default:
+                return null;
+        }
+    }
+    
     @Override
     public int hashCode() { return name != null ? name.hashCode() : 0; }
 
@@ -44,9 +61,5 @@ public class UserEntity implements Serializable {
 
     @Override
     public String toString() { return "User: " + name; }
-
-    public Object getUserType() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+ 
 }

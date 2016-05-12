@@ -22,13 +22,12 @@ public class ClientEntity extends UserEntity {
                 orphanRemoval = true )
     private final List<RateEntity> rates;
     
-    public ClientEntity(){ 
-        super(); 
+    public ClientEntity(){
         this.credit = 0.0;
         this.rates = new ArrayList<>();
     }
     public ClientEntity(String username, String password, String name, String email, String address, String taxId){
-        super(username, password, name);
+        super("client", username, password, name);
         this.credit = 0.0;
         this.email = email;
         this.address = address;

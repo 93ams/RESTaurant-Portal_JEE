@@ -26,7 +26,16 @@ public class ClientBean implements Serializable {
     @EJB
     PurchaseDAO purchaseDAO;
     
-    public ClientBean() {}
+    private Integer rate;
+    private Integer quantity;
+    
+    public ClientBean() { rate = -1; }
+
+    public Integer getRate() { return rate; } 
+    public void setRate(Integer rate) { this.rate = rate; }
+
+    public Integer getQuantity() { return quantity; } 
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
     
     private ClientEntity getSessionClient(){
         try {
@@ -43,9 +52,9 @@ public class ClientBean implements Serializable {
         try {
             ClientEntity client = getSessionClient();
             if(client != null){
-                RateEntity rate = rateDAO.getRate(client.getUsername(), dish.getRestaurant().getName(), dish.getId());
-                if(rate != null){
-                    return rate.getRate();
+                RateEntity r = rateDAO.getRate(client.getUsername(), dish.getRestaurant().getName(), dish.getId());
+                if(r != null){
+                    return r.getRate();
                 }
             } else {
                 errorMessage("You are not a known client", "toto");
@@ -57,11 +66,14 @@ public class ClientBean implements Serializable {
         return null;
     }
     
-    public void rateDish(DishEntity dish, Integer rate){
+    public String rateDish(DishEntity dish){
         try {
             ClientEntity client = getSessionClient();
             if(client != null){
-                rateDAO.createRate(client, dish, rate);
+                if(rate > 0){
+                    rateDAO.createRate(client, dish, rate);
+                    return "dish.xhtml";
+                }
             } else {
                 errorMessage("You are not a known client", "toto");
             }
@@ -69,13 +81,16 @@ public class ClientBean implements Serializable {
             System.out.println("Error @ ClientBean: rateDish");
             System.out.println( e.getMessage() );
         }
+        return "";
     }
     
-    public void unrateDish(DishEntity dish){
+    public String unrateDish(DishEntity dish){
         try {
             ClientEntity client = getSessionClient();
             if(client != null){
-                
+                System.out.println("PASCOA");
+                rateDAO.deleteRate(client.getUsername(), dish.getRestaurant().getName(), dish.getId());
+                return "dish.xhtml";
             } else {
                 errorMessage("You are not a known client", "toto");
             }
@@ -83,6 +98,7 @@ public class ClientBean implements Serializable {
             System.out.println("Error @ ClientBean: unrateDish");
             System.out.println( e.getMessage() );
         }
+        return "";
     }
     
     private PurchaseEntity getShoppingCart(ClientEntity client){
@@ -99,12 +115,17 @@ public class ClientBean implements Serializable {
         return null;
     }
     
-    public void addToShoppingCart(DishEntity dish, Integer quantity){
+    public String addToShoppingCart(DishEntity dish){
         try {
             ClientEntity client = getSessionClient();
             if(client != null){
-                PurchaseEntity shoppingCart = getShoppingCart(client);
-                purchaseDAO.addDishToShoppingCart(shoppingCart, dish, quantity);
+                if(quantity > 0){
+                    PurchaseEntity shoppingCart = getShoppingCart(client);
+                    purchaseDAO.addDishToShoppingCart(shoppingCart, dish, quantity);
+                    quantity = 0;
+                } else {
+                    errorMessage("You can't buy negative values", "dumbdumb");
+                }
             } else {
                 errorMessage("You are not a known client", "toto");
             }
@@ -112,14 +133,19 @@ public class ClientBean implements Serializable {
             System.out.println("Error @ ClientBean: addToShoppingCart");
             System.out.println( e.getMessage() );
         }
+        return "";
     }
     
-    public void removeFromShoppingCart(DishEntity dish, Integer quantity){
+    public String removeFromShoppingCart(DishEntity dish){
         try {
             ClientEntity client = getSessionClient();
             if(client != null){
-                PurchaseEntity shoppingCart = getShoppingCart(client);
-                purchaseDAO.removeDishFromShoppingCart(shoppingCart, dish, quantity);
+                if(quantity > 0){
+                    PurchaseEntity shoppingCart = getShoppingCart(client);
+                    purchaseDAO.removeDishFromShoppingCart(shoppingCart, dish, quantity);
+                } else{
+                    errorMessage("I do not care for double negatives", "dumbdumb");
+                }
             } else {
                 errorMessage("You are not a known client", "toto");
             }
@@ -127,6 +153,7 @@ public class ClientBean implements Serializable {
             System.out.println("Error @ ClientBean: removeFromShoppingCart");
             System.out.println( e.getMessage() );
         }
+        return "";
     }
     
     public void checkout(){
@@ -141,21 +168,6 @@ public class ClientBean implements Serializable {
             System.out.println("Error @ ClientBean: checkout");
             System.out.println( e.getMessage() );
         }
-    }
-    
-    public String goToShoppingCart(){
-        try {
-            ClientEntity client = getSessionClient();
-            if(client != null){
-                return "shoppingCart.xhtml";
-            } else {
-                errorMessage("You are not a known client", "toto");
-            }
-        } catch( Exception e ){
-            System.out.println("Error @ ClientBean: goToShoppingCart");
-            System.out.println( e.getMessage() );
-        }
-        return "index.xhtml";
     }
     
     private void errorMessage( String message, String details ){

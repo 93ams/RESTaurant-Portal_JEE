@@ -23,9 +23,7 @@ public class LoginDAO {
     
     private UserEntity getUser( String username ){
         try {
-            return (UserEntity) em.createNamedQuery("findUserByUsername")
-                                  .setParameter("username", username)
-                                  .getSingleResult();
+            return (UserEntity) em.find(UserEntity.class, username);
         } catch ( NoResultException e ) {
             System.out.println( e.getMessage() );
         } catch ( Exception e ) {

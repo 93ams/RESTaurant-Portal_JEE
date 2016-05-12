@@ -26,7 +26,7 @@ public class OrderItemEntity implements Serializable {
     @ManyToOne(optional=false)
     @JoinColumns({
         @JoinColumn(name= "DISH_ID", referencedColumnName="ID"),
-        @JoinColumn(name= "RESTAURANT_ID", referencedColumnName="RESTAURANT_ID")
+        @JoinColumn(name= "RESTAURANT_NAME", referencedColumnName="RESTAURANT_NAME")
     })
     @Id private DishEntity dish;
     

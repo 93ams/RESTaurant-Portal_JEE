@@ -38,10 +38,8 @@ public class AuthFilter implements Filter {
                      || (session != null && session.getAttribute("user") != null)
                      || reqURI.contains("/public/")
                      || reqURI.contains("javax.faces.resource")){
-                System.out.println("AuthFilter is chill");
                 chain.doFilter(request, response);
             } else {
-                System.out.println("AuthFilter not so chill");
                 res.sendRedirect(req.getContextPath() + "/login.xhtml");
             }
         } catch (IOException | ServletException e) {

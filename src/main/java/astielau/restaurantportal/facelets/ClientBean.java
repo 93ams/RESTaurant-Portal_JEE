@@ -4,6 +4,7 @@ import astielau.restaurantportal.dao.PurchaseDAO;
 import astielau.restaurantportal.dao.RateDAO;
 import astielau.restaurantportal.entities.ClientEntity;
 import astielau.restaurantportal.entities.DishEntity;
+import astielau.restaurantportal.entities.OrderItemEntity;
 import astielau.restaurantportal.entities.PurchaseEntity;
 import astielau.restaurantportal.entities.RateEntity;
 import java.io.Serializable;
@@ -28,6 +29,7 @@ public class ClientBean implements Serializable {
     
     private Integer rate;
     private Integer quantity;
+    private Integer[] array;
     
     public ClientBean() { rate = -1; }
 
@@ -36,7 +38,9 @@ public class ClientBean implements Serializable {
 
     public Integer getQuantity() { return quantity; } 
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
-    
+
+    public Integer[] getArray() { return array; }
+     
     private ClientEntity getSessionClient(){
         try {
             HttpSession session = SessionBean.getSession();
@@ -101,12 +105,14 @@ public class ClientBean implements Serializable {
         return "";
     }
     
-    private PurchaseEntity getShoppingCart(ClientEntity client){
+    public PurchaseEntity getShoppingCart(){
         try {
+            ClientEntity client = getSessionClient();
             PurchaseEntity shoppingCart = purchaseDAO.getUserShoppingCart(client.getUsername());
             if(shoppingCart == null){
                 shoppingCart = purchaseDAO.createShoppingCart(client);
             }
+            this.array = new Integer[shoppingCart.getItems().size()];
             return shoppingCart;
         } catch( Exception e ){
             System.out.println("Error @ ClientBean: getShoppingCart");
@@ -120,7 +126,7 @@ public class ClientBean implements Serializable {
             ClientEntity client = getSessionClient();
             if(client != null){
                 if(quantity > 0){
-                    PurchaseEntity shoppingCart = getShoppingCart(client);
+                    PurchaseEntity shoppingCart = getShoppingCart();
                     purchaseDAO.addDishToShoppingCart(shoppingCart, dish, quantity);
                     quantity = 0;
                 } else {
@@ -136,15 +142,14 @@ public class ClientBean implements Serializable {
         return "";
     }
     
-    public String removeFromShoppingCart(DishEntity dish){
+    public String removeFromShoppingCart(OrderItemEntity item, Integer quantity){
         try {
             ClientEntity client = getSessionClient();
             if(client != null){
-                if(quantity > 0){
-                    PurchaseEntity shoppingCart = getShoppingCart(client);
-                    purchaseDAO.removeDishFromShoppingCart(shoppingCart, dish, quantity);
-                } else{
-                    errorMessage("I do not care for double negatives", "dumbdumb");
+                if(quantity <= item.getQuantity()){
+                    PurchaseEntity shoppingCart = getShoppingCart();
+                    System.out.println("Goin' in " + quantity);
+                    purchaseDAO.removeDishFromShoppingCart(shoppingCart, item.getDish(), quantity);
                 }
             } else {
                 errorMessage("You are not a known client", "toto");
@@ -156,11 +161,14 @@ public class ClientBean implements Serializable {
         return "";
     }
     
-    public void checkout(){
+    public String checkout(){
         try {
             ClientEntity client = getSessionClient();
             if(client != null){
+                PurchaseEntity shoppingCart = getShoppingCart();
                 purchaseDAO.checkout(client.getUsername());
+                client.setCredit(client.getCredit() - shoppingCart.getTotal());
+                return "shoppingcart.xhtml";
             } else {
                 errorMessage("You are not a known client", "toto");
             }
@@ -168,8 +176,9 @@ public class ClientBean implements Serializable {
             System.out.println("Error @ ClientBean: checkout");
             System.out.println( e.getMessage() );
         }
+        return "";
     }
-    
+
     private void errorMessage( String message, String details ){
         FacesContext.getCurrentInstance().addMessage( null,
             new FacesMessage(FacesMessage.SEVERITY_WARN, message, details));

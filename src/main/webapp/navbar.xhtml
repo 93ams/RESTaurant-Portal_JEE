@@ -4,14 +4,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <body>
         <ui:composition>
             <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="container">
                     <div class="navbar-header col-md-3">
-                        <a class="navbar-brand" style="font-size: 175%" href="/PortalService">RESTaurant Manager</a>
+                        <a class="navbar-brand" style="font-size: 175%" 
+                           href="#{request.contextPath}">RESTaurant Manager</a>
                     </div>
                     <ul class="nav navbar-nav">
                         
@@ -20,21 +20,29 @@
                                     outcome="mealchecks" 
                                     rendered="#{sessionScope.user.getUserType() == 'client'}"/> 
                         </li>
+                        <li> 
+                            <h:link value="ShoppingCart" 
+                                    outcome="shoppingcart" 
+                                    rendered="#{sessionScope.user.getUserType() == 'client'}"/> 
+                        </li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right col-md-4">
+                    <div class="nav navbar-nav navbar-right">
+                        <h:outputText value="Credit: $#{sessionScope.user.getCredit()}"
+                                      style="color: blue;"
+                                      rendered="#{sessionScope.user.getUserType() == 'client'}"/>
                         <div>
-                            <h:form class="navbar-form">
+                            <h:form class="navbar-form" role="form">
                                 <c:choose>
                                     <c:when test="#{loginBean.logged != true}">
-                                        <div class=" col-md-3">
+                                        <div class="col-md-8 col-md-offset-8">
                                             <div class="form-group">
-                                                <h:inputText id="username" class="form-control" value="#{loginBean.username}"/>
-                                                <h:inputSecret id="password" class="form-control" value="#{loginBean.password}"/>
+                                                <h:inputText id="username" class="form-control col-md-8" value="#{loginBean.username}"/>
+                                                <h:commandButton class="btn-xs col-md-4" style="width: 80px" action="#{loginBean.login()}" value="Login"></h:commandButton> 
                                             </div>
-                                        </div>
-                                        <div class="col-md-offset-5 col-md-3">
-                                            <h:commandButton class="btn-xs pull-right" style="width: 80px" action="#{loginBean.login()}" value="Login"></h:commandButton> 
-                                            <h:commandButton class="btn-xs pull-right" style="width: 80px" action="register.xhtml" value="Register"></h:commandButton>
+                                            <div class="form-group">
+                                                <h:inputSecret id="password" class="form-control col-md-8" value="#{loginBean.password}"/>
+                                                <h:commandButton class="btn-xs col-md-4" style="width: 80px" action="register.xhtml" value="Register"></h:commandButton>
+                                            </div>
                                         </div>
                                     </c:when>
                                     <c:otherwise>
@@ -43,7 +51,7 @@
                                 </c:choose>
                             </h:form>
                         </div>
-                    </ul>
+                    </div>
                 </div>
             </nav>
         </ui:composition>

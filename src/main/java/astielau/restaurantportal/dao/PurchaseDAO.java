@@ -143,13 +143,14 @@ public class PurchaseDAO {
                 if(orderItem == null){
                     //erro
                 } else {
+                    System.out.println("Removing " + quantity + " " + dish.getName() + "s");
                     Integer total = orderItem.getQuantity() - quantity;
                     if(total < 0){
                         //erro
                     } else if(total == 0) {
                         orderItemDAO.deleteOrderItem(shoppingCart.getClient().getUsername(), shoppingCart.getId(), dish.getRestaurant().getName(), dish.getId());
                     } else {
-                        orderItem.setQuantity(orderItem.getQuantity() + quantity);
+                        orderItem.setQuantity(orderItem.getQuantity() - quantity);
                     }
                 }
             }

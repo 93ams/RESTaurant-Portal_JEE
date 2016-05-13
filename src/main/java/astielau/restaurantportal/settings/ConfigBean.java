@@ -45,7 +45,7 @@ public class ConfigBean {
             
             client.setCredit(9999.99);
             
-            purchaseDAO.checkout(client.getUsername());
+            //purchaseDAO.checkout(client.getUsername());
             
             System.out.println("> " + purchaseDAO.getClientPurchases(client.getUsername()));
             

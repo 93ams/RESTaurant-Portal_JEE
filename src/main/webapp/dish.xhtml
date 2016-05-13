@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
         <ui:composition template="/templates/main.xhtml">
             <ui:define name="main">
@@ -21,13 +22,43 @@
                                         #{ingredient.getName()} - #{ingredient.getType()}
                                         <h:commandButton action="#" value="Remove" 
                                             rendered="#{sessionScope.user.getUserType() == 'manager'
-                                                    and sessionScope.user.getRestaurant() == sessionScope.restaurant.getName()}"/>
+                                                    and sessionScope.user.getRestaurant() == sessionScope.restaurant}"/>
                                     </li>
                                 </ui:repeat>
                             </ul>
                         </c:if>
+                        <c:if test="#{sessionScope.user.getUserType() == 'client'}">
+                            <c:set var="rate" value="#{clientBean.getRate(sessionScope.dish)}" />
+                            <p> 
+                                <c:choose>
+                                    <c:when test="#{rate == null}">
+                                        <p>
+                                            <h:selectOneMenu value="#{clientBean.rate}">
+                                                <f:selectItem itemValue="-1" itemLabel="Rate" />
+                                                <f:selectItem itemValue="1" itemLabel="1" />
+                                                <f:selectItem itemValue="2" itemLabel="2" />
+                                                <f:selectItem itemValue="3" itemLabel="3" />
+                                                <f:selectItem itemValue="4" itemLabel="4" />
+                                                <f:selectItem itemValue="5" itemLabel="5" />
+                                            </h:selectOneMenu>
+                                        </p>
+                                        <h:commandButton action="#{clientBean.rateDish(sessionScope.dish)}" value="Rate"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p> #{rate}* <h:commandButton action="#{clientBean.unrateDish(sessionScope.dish)}" value="Unrate"/></p>
+                                    </c:otherwise>
+                                </c:choose>
+                            </p>
+                            <p>
+                                <h:commandButton action="#{clientBean.addToShoppingCart(sessionScope.dish)}" value="Add To Cart"/>
+                                <h:inputText id="quantity" value="#{clientBean.quantity}"></h:inputText>
+                                <h:message for="quantity"></h:message>
+                            </p>
+                        </c:if>
                         <p>
-                            <h:commandButton action="#{restaurantBean.removeDish(sessionScope.restaurant, sessionScope.dish)}" value="Remove"/>
+                            <h:commandButton action="#{restaurantBean.removeDish(sessionScope.restaurant, sessionScope.dish)}" value="Remove"
+                                             rendered="#{sessionScope.user.getUserType() == 'manager'
+                                                    and sessionScope.user.getRestaurant() == sessionScope.restaurant}"/>
                             <h:button outcome="#{restaurantBean.goToRestaurant(sessionScope.restaurant)}" value="Back"/>
                         </p>
                     </h:form>

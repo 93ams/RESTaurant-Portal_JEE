@@ -2,6 +2,8 @@ astielau\restaurantportal\entities\OrderItemEntity.class
 astielau\restaurantportal\entities\ClientEntity_.class
 astielau\restaurantportal\dto\OrderItemDTO.class
 astielau\restaurantportal\entities\RestaurantEntity.class
+astielau\restaurantportal\facelets\SessionBean.class
+astielau\restaurantportal\enums\UserTypeEnum.class
 astielau\restaurantportal\cpk\DishPK.class
 astielau\restaurantportal\cpk\PurchasePK.class
 astielau\restaurantportal\entities\ClientEntity.class
@@ -19,6 +21,7 @@ astielau\restaurantportal\dto\IngredientDTO.class
 astielau\restaurantportal\dao\DishDAO.class
 astielau\restaurantportal\dao\IngredientDAO.class
 astielau\restaurantportal\settings\ConfigBean.class
+astielau\restaurantportal\filters\RestaurantFilter.class
 astielau\restaurantportal\dto\DishDTO.class
 astielau\restaurantportal\dao\PurchaseDAO.class
 astielau\restaurantportal\entities\RateEntity_.class
@@ -31,6 +34,7 @@ astielau\restaurantportal\entities\RateEntity.class
 astielau\restaurantportal\entities\DishEntity_.class
 astielau\restaurantportal\facelets\RestaurantBean.class
 astielau\restaurantportal\entities\OrderItemEntity_.class
+astielau\restaurantportal\filters\AuthFilter.class
 astielau\restaurantportal\dao\ClientDAO.class
 astielau\restaurantportal\dto\RateDTO.class
 astielau\restaurantportal\dao\RateDAO.class
@@ -40,4 +44,5 @@ astielau\restaurantportal\facelets\ClientBean.class
 astielau\restaurantportal\entities\IngredientEntity_.class
 astielau\restaurantportal\entities\ManagerEntity.class
 astielau\restaurantportal\entities\DishEntity.class
+astielau\restaurantportal\facelets\LoginBean$1.class
 astielau\restaurantportal\dao\RestaurantDAO.class

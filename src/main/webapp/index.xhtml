@@ -23,13 +23,15 @@
                                         <h:commandButton action="#{restaurantBean.goToRestaurant(restaurant)}" value="Details" 
                                                          rendered="#{sessionScope.user != null}"/>
                                         <h:outputText value=" Yours" rendered="#{sessionScope.user.getUserType() == 'manager' 
-                                                                             and sessionScope.user.getRestaurant() == restaurant.getName()}" />
+                                                                             and sessionScope.user.getRestaurant() == restaurant}" />
+                                        
                                     </li>
                                 </ui:repeat>
                             </ul>
                             <h:commandButton action="#{restaurantBean.goToNewRestaurant()}" value="Register your Restaurant" 
                                              rendered="#{sessionScope.user.getUserType() == 'manager'
                                                      and sessionScope.user.getRestaurant() == null}"/>
+                            <h:messages></h:messages>
                         </h:form>
                     </c:if>
                     <c:choose>

@@ -13,7 +13,7 @@
                         <h2> Address: #{sessionScope.restaurant.getAddress()} </h2>
                         <h:commandButton action="#" value="Edit Address" 
                                              rendered="#{sessionScope.user.getUserType() == 'manager'
-                                                     and sessionScope.user.getRestaurant() == sessionScope.restaurant.getName()}"/>
+                                                     and sessionScope.user.getRestaurant() == sessionScope.restaurant}"/>
                         <br/><br/>
                         <c:if test="#{sessionScope.restaurant.getDishes() != null 
                                  and !sessionScope.restaurant.getDishes().isEmpty()}">
@@ -28,9 +28,9 @@
                             </ul>
                             <br/><br/>
                         </c:if>
-                        <h:commandButton action="#{restaurantBean.goToNewDish()}" value="Add Dish" 
+                        <h:commandButton action="#{restaurantBean.goToNewDish(sessionScope.restaurant)}" value="Add Dish" 
                                          rendered="#{sessionScope.user.getUserType() == 'manager'
-                                                 and sessionScope.user.getRestaurant() == sessionScope.restaurant.getName()}"/>
+                                                 and sessionScope.user.getRestaurant() == sessionScope.restaurant}"/>
                         <br/><br/><br/>
                         <c:if test="#{sessionScope.restaurant.getManagers() != null 
                                  and !sessionScope.restaurant.getManagers().isEmpty()}">
@@ -41,7 +41,7 @@
                         </c:if>
                         <h:commandButton action="#" value="Add Manager" 
                             rendered="#{sessionScope.user.getUserType() == 'manager'
-                                    and sessionScope.user.getRestaurant() == sessionScope.restaurant.getName()}"/>
+                                    and sessionScope.user.getRestaurant() == sessionScope.restaurant}"/>
                     </h:form>
                 </div>
             </ui:define>

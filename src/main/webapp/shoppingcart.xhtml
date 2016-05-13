@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="/templates/main.xhtml">
+            <ui:define name="main">
+                <div class="container">
+                    <h1>Your Shopping Cart: </h1>
+                    <h:form>
+                        <c:set var="cart" value="#{clientBean.getShoppingCart()}" />
+                        <c:if test="#{cart.getItems() != null}">
+                            <h2>Items: </h2>
+                            <ul>
+                                <ui:repeat value="#{cart.getItems()}" var="item" varStatus="loop">
+                                    <li>
+                                        #{item.getQuantity()} #{item.dish.getName()}
+                                        <h:inputText id="item-#{loop.index}" value="#{clientBean.array[loop.index]}"></h:inputText>
+                                        <h:commandButton action="#{clientBean.removeFromShoppingCart(item, clientBean.array[loop.index])}" value="Remove"/>
+                                        <h:message for="item-#{i[0]}"></h:message>
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                            <p>Total: $#{cart.getTotal()}</p>
+                            <h:commandButton action="#{clientBean.checkout()}" value="Checkout"/>
+                        </c:if>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

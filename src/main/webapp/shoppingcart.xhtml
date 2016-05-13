@@ -11,11 +11,10 @@
                 <div class="container">
                     <h1>Your Shopping Cart: </h1>
                     <h:form>
-                        <c:set var="cart" value="#{clientBean.getShoppingCart()}" />
-                        <c:if test="#{cart.getItems() != null}">
+                        <c:if test="#{clientBean.getShoppingCart().getItems() != null}">
                             <h2>Items: </h2>
                             <ul>
-                                <ui:repeat value="#{cart.getItems()}" var="item" varStatus="loop">
+                                <ui:repeat value="#{clientBean.getShoppingCart().getItems()}" var="item" varStatus="loop">
                                     <li>
                                         #{item.getQuantity()} #{item.dish.getName()}
                                         <h:inputText id="item-#{loop.index}" value="#{clientBean.array[loop.index]}"></h:inputText>
@@ -24,7 +23,7 @@
                                     </li>
                                 </ui:repeat>
                             </ul>
-                            <p>Total: $#{cart.getTotal()}</p>
+                            <p>Total: $#{clientBean.getShoppingCart().getTotal()}</p>
                             <h:commandButton action="#{clientBean.checkout()}" value="Checkout"/>
                         </c:if>
                     </h:form>

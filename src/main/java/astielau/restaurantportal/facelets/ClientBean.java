@@ -126,8 +126,7 @@ public class ClientBean implements Serializable {
             ClientEntity client = getSessionClient();
             if(client != null){
                 if(quantity > 0){
-                    PurchaseEntity shoppingCart = getShoppingCart();
-                    purchaseDAO.addDishToShoppingCart(shoppingCart, dish, quantity);
+                    purchaseDAO.addDishToShoppingCart(client.getUsername(), dish, quantity);
                     quantity = 0;
                 } else {
                     errorMessage("You can't buy negative values", "dumbdumb");
@@ -147,9 +146,7 @@ public class ClientBean implements Serializable {
             ClientEntity client = getSessionClient();
             if(client != null){
                 if(quantity <= item.getQuantity()){
-                    PurchaseEntity shoppingCart = getShoppingCart();
-                    System.out.println("Goin' in " + quantity);
-                    purchaseDAO.removeDishFromShoppingCart(shoppingCart, item.getDish(), quantity);
+                    purchaseDAO.removeDishFromShoppingCart(client.getUsername(), item.getDish(), quantity);
                 }
             } else {
                 errorMessage("You are not a known client", "toto");

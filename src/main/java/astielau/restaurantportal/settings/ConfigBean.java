@@ -39,7 +39,7 @@ public class ConfigBean {
             DishEntity dish = restaurantDAO.addDishToRestaurant(restaurant.getName(), "Lasanha de Soja", 5.00);
             
             PurchaseEntity shoppingCart = purchaseDAO.createShoppingCart(client);
-            purchaseDAO.addDishToShoppingCart(shoppingCart, dish, 69);
+            purchaseDAO.addDishToShoppingCart(client.getUsername(), dish, 69);
             
             rateDAO.createRate(client, dish, 5);
             

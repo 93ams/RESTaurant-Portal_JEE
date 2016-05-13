@@ -80,7 +80,7 @@ public class PurchaseDAO {
                 em.persist(purchase);
                 return purchase;
             } else {
-                //erro
+                System.out.println("Uber Shit");
             }
         } catch ( Exception e) {
             System.out.println("Error @ PurchaseDAO: createPurchase");
@@ -93,7 +93,9 @@ public class PurchaseDAO {
         try {
             PurchaseEntity purchase = getUserShoppingCart(username);
             if(purchase != null){ 
-                purchase.pay();
+                if(purchase.getTotal() > 0){
+                    purchase.pay();
+                }
             } else {
                 //erro
             }
@@ -119,9 +121,10 @@ public class PurchaseDAO {
         }
     }
     
-    public void addDishToShoppingCart(PurchaseEntity shoppingCart, DishEntity dish, Integer quantity){
+    public void addDishToShoppingCart(String username, DishEntity dish, Integer quantity){
         try {
             if(quantity > 0){
+                PurchaseEntity shoppingCart = getUserShoppingCart(username);
                 OrderItemEntity orderItem = orderItemDAO.getOrderItem(shoppingCart.getClient().getUsername(), shoppingCart.getId(), dish.getRestaurant().getName(), dish.getId());
                 if(orderItem == null){
                     orderItem = orderItemDAO.createOrderItem(shoppingCart, dish, quantity);
@@ -136,9 +139,10 @@ public class PurchaseDAO {
         }
     }
     
-    public void removeDishFromShoppingCart(PurchaseEntity shoppingCart, DishEntity dish, Integer quantity){
+    public void removeDishFromShoppingCart(String username, DishEntity dish, Integer quantity){
         try {
             if(quantity > 0){
+                PurchaseEntity shoppingCart = getUserShoppingCart(username);
                 OrderItemEntity orderItem = orderItemDAO.getOrderItem(shoppingCart.getClient().getUsername(), shoppingCart.getId(), dish.getRestaurant().getName(), dish.getId());
                 if(orderItem == null){
                     //erro

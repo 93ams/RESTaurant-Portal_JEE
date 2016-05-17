@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="http://mealcheckservice.astielau/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://mealcheckservice.astielau/">
+
+<xs:element name="emit" type="tns:emit"/>
+
+<xs:element name="emitResponse" type="tns:emitResponse"/>
+
+<xs:element name="endorse" type="tns:endorse"/>
+
+<xs:element name="endorseResponse" type="tns:endorseResponse"/>
+
+<xs:element name="list" type="tns:list"/>
+
+<xs:element name="listResponse" type="tns:listResponse"/>
+
+<xs:element name="use" type="tns:use"/>
+
+<xs:element name="useResponse" type="tns:useResponse"/>
+
+<xs:complexType name="emit">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="amount" type="xs:double" minOccurs="0"/>
+<xs:element name="endorsable" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="emitResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:mealCheckDTO" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="mealCheckDTO">
+<xs:sequence>
+<xs:element name="amount" type="xs:double" minOccurs="0"/>
+<xs:element name="endorsable" type="xs:boolean"/>
+<xs:element name="id" type="xs:string" minOccurs="0"/>
+<xs:element name="used" type="xs:boolean"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="use">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="check" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="useResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:double" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="endorse">
+<xs:sequence>
+<xs:element name="fromUser" type="xs:string" minOccurs="0"/>
+<xs:element name="toUser" type="xs:string" minOccurs="0"/>
+<xs:element name="check" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="endorseResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="list">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="used" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="listResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:mealCheckDTO" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

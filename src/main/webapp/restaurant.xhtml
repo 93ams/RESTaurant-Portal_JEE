@@ -22,7 +22,8 @@
                                 <ui:repeat value="#{sessionScope.restaurant.getDishes()}" var="dish">
                                     <li>
                                         #{dish.getName()} - $#{dish.getPrice()}
-                                        <h:commandButton action="#{restaurantBean.goToDish(sessionScope.restaurant, dish)}" value="Details"/>
+                                        <h:commandButton action="#{restaurantBean.goToDish(sessionScope.restaurant, dish)}" 
+                                                         value="Details"/>
                                     </li>
                                 </ui:repeat>
                             </ul>

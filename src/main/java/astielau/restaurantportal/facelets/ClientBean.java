@@ -1,5 +1,6 @@
 package astielau.restaurantportal.facelets;
 
+import astielau.restaurantportal.dao.ClientDAO;
 import astielau.restaurantportal.dao.PurchaseDAO;
 import astielau.restaurantportal.dao.RateDAO;
 import astielau.restaurantportal.entities.ClientEntity;
@@ -7,7 +8,15 @@ import astielau.restaurantportal.entities.DishEntity;
 import astielau.restaurantportal.entities.OrderItemEntity;
 import astielau.restaurantportal.entities.PurchaseEntity;
 import astielau.restaurantportal.entities.RateEntity;
+import astielau.restaurantportal.wsclients.invoice.InvoiceDTO;
+import astielau.restaurantportal.wsclients.invoice.InvoiceList;
+import astielau.restaurantportal.wsclients.invoice.InvoiceRegistryWS;
+import astielau.restaurantportal.wsclients.invoice.InvoiceRegistryWS_Service;
+import astielau.restaurantportal.wsclients.mealcheck.MealCheckDTO;
+import astielau.restaurantportal.wsclients.mealcheck.MealCheckWS;
+import astielau.restaurantportal.wsclients.mealcheck.MealCheckWS_Service;
 import java.io.Serializable;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -27,11 +36,24 @@ public class ClientBean implements Serializable {
     @EJB
     PurchaseDAO purchaseDAO;
     
+    @EJB
+    ClientDAO clientDAO;
+    
     private Integer rate;
     private Integer quantity;
     private Integer[] array;
     
-    public ClientBean() { rate = -1; }
+    InvoiceRegistryWS invoiceRegistry;
+    MealCheckWS mealCheck;
+    
+    public ClientBean() { 
+        InvoiceRegistryWS_Service invoiceRegistryWS = new InvoiceRegistryWS_Service();
+        invoiceRegistry = invoiceRegistryWS.getInvoiceRegistryWSPort();
+        
+        MealCheckWS_Service mealCheckWS = new MealCheckWS_Service();
+        mealCheck = mealCheckWS.getMealCheckWSPort();
+        rate = -1; 
+    }
 
     public Integer getRate() { return rate; } 
     public void setRate(Integer rate) { this.rate = rate; }
@@ -158,14 +180,91 @@ public class ClientBean implements Serializable {
         return "";
     }
     
+    public List<InvoiceDTO> getClientInvoices(){
+        try {
+            ClientEntity client = getSessionClient();
+            if(client != null){
+                InvoiceList invoices = invoiceRegistry.listInvoices("321654987", client.getTaxId());
+                return invoices.getInvoices();
+            } else {
+                errorMessage("You are not a known client", "toto");
+            }
+        } catch( Exception e ){
+            System.out.println("Error @ ClientBean: getClientInvoices");
+            System.out.println( e.getMessage() );
+        }
+        return null;
+    } 
+    
+    public List<InvoiceDTO> getEmissorInvoices(){
+        try {
+            InvoiceList invoices = invoiceRegistry.getInvoices("321654987");
+            return invoices.getInvoices();
+        } catch( Exception e ){
+            System.out.println("Error @ ClientBean: getEmissorInvoices");
+            System.out.println( e.getMessage() );
+        }
+        return null;
+    } 
+    
+    public String goToInvoice(InvoiceDTO invoice){
+        try {
+            HttpSession session = SessionBean.getSession();
+            session.setAttribute("invoice", invoice);
+            return "invoice.xhtml?faces-redirect=true";
+        } catch( Exception e ){
+            System.out.println("Error @ ClientBean: goToInvoice");
+            System.out.println( e.getMessage() );
+        }
+        return "";
+    }
+    
+    public List<MealCheckDTO> getClientMealChecks(){
+        try {
+            ClientEntity client = getSessionClient();
+            if(client != null){
+                return mealCheck.list(client.getUsername(), true);
+            } else {
+                errorMessage("You are not a known client", "toto");
+            }
+        } catch( Exception e ){
+            System.out.println("Error @ ClientBean: getClientMealChecks");
+            System.out.println( e.getMessage() );
+        }
+        return null;
+    }
+    
+    public String useMealCheck(MealCheckDTO check){
+        try {
+            ClientEntity client = getSessionClient();
+            if(client != null){
+                if(client.getUsername().equals(check.getUsername())){
+                    if(!check.isUsed()){
+                        Double amount = mealCheck.use(client.getUsername(), check.getId());
+                        clientDAO.addCreditToClient(client.getUsername(), amount);
+                        client.setCredit(client.getCredit() + amount);
+                    }
+                }
+            } else {
+                errorMessage("You are not a known client", "toto");
+            }
+        } catch( Exception e ){
+            System.out.println("Error @ ClientBean: getClientMealChecks");
+            System.out.println( e.getMessage() );
+        }
+        return "";
+    }
+    
     public String checkout(){
         try {
             ClientEntity client = getSessionClient();
             if(client != null){
                 PurchaseEntity shoppingCart = getShoppingCart();
-                purchaseDAO.checkout(client.getUsername());
-                client.setCredit(client.getCredit() - shoppingCart.getTotal());
-                return "shoppingcart.xhtml";
+                if((client.getCredit() - shoppingCart.getTotal()) >= 0){
+                    purchaseDAO.checkout(client.getUsername());
+                    client.setCredit(client.getCredit() - shoppingCart.getTotal());
+                    return "shoppingcart.xhtml";
+                }
             } else {
                 errorMessage("You are not a known client", "toto");
             }

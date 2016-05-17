@@ -122,9 +122,11 @@ public class RestaurantBean implements Serializable {
             ManagerEntity user = (ManagerEntity) getSessionUser();
             RestaurantEntity restaurant = getSessionRestaurant();
             if(user != null && restaurant != null){
-                managerDAO.addDishToRestaurant(user.getUsername(), restaurant.getName(), dishName, dishPrice);
-                DishEntity new_dish = new DishEntity(dishName, dishPrice);
-                restaurant.addDish(new_dish);
+                if(dishPrice > 0){
+                    managerDAO.addDishToRestaurant(user.getUsername(), restaurant.getName(), dishName, dishPrice);
+                    DishEntity new_dish = new DishEntity(dishName, dishPrice);
+                    restaurant.addDish(new_dish);
+                }
             }
         } catch( Exception e ) {
             System.out.println("Error @ RestaurantBean: addDish");

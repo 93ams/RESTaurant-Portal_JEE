@@ -16,7 +16,7 @@
                     <ul class="nav navbar-nav">
                         
                         <li> 
-                            <h:link value="Buy Meal Checks" 
+                            <h:link value="Meal Checks" 
                                     outcome="mealchecks" 
                                     rendered="#{sessionScope.user.getUserType() == 'client'}"/> 
                         </li>
@@ -24,6 +24,11 @@
                             <h:link value="ShoppingCart" 
                                     outcome="shoppingcart" 
                                     rendered="#{sessionScope.user.getUserType() == 'client'}"/> 
+                        </li>
+                        <li> 
+                            <h:link value="Invoices" 
+                                    outcome="invoices" 
+                                    rendered="#{sessionScope.user.getUserType() != null}"/> 
                         </li>
                     </ul>
                     <div class="nav navbar-nav navbar-right">

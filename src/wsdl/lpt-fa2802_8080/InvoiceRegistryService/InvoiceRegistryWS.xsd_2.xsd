@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="http://invoiceregistryservice.astielau/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://invoiceregistryservice.astielau/">
+
+<xs:element name="getInvoicesResponse" type="tns:getInvoicesResponse"/>
+
+<xs:element name="registerInvoiceResponse" type="tns:registerInvoiceResponse"/>
+
+<xs:complexType name="invoiceList">
+<xs:sequence>
+<xs:element name="invoices" type="tns:invoiceDTO" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="invoiceDTO">
+<xs:sequence>
+<xs:element name="clientTaxId" type="xs:string" minOccurs="0"/>
+<xs:element name="emisorName" type="xs:string" minOccurs="0"/>
+<xs:element name="emissionDate" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="emissorTaxId" type="xs:string" minOccurs="0"/>
+<xs:element name="id" type="xs:string" minOccurs="0"/>
+<xs:element name="items" type="tns:invoiceItemDTO" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="total" type="xs:double" minOccurs="0"/>
+<xs:element name="VAT" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="invoiceItemDTO">
+<xs:sequence>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="price" type="xs:double" minOccurs="0"/>
+<xs:element name="quantity" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getRespectiveVAT">
+<xs:sequence>
+<xs:element name="emissorTaxId" type="xs:string" minOccurs="0"/>
+<xs:element name="year" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getInvoices">
+<xs:sequence>
+<xs:element name="emissorTaxId" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getInvoicesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:invoiceList" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="registerInvoice">
+<xs:sequence>
+<xs:element name="invoice" type="tns:invoiceDTO" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="registerInvoiceResponse">
+<xs:sequence/>
+</xs:complexType>
+</xs:schema>

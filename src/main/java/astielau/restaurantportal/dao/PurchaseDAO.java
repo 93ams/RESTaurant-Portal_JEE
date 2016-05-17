@@ -5,12 +5,18 @@ import astielau.restaurantportal.entities.ClientEntity;
 import astielau.restaurantportal.entities.DishEntity;
 import astielau.restaurantportal.entities.OrderItemEntity;
 import astielau.restaurantportal.entities.PurchaseEntity;
+import astielau.restaurantportal.wsclients.invoice.InvoiceDTO;
+import astielau.restaurantportal.wsclients.invoice.InvoiceItemDTO;
+import astielau.restaurantportal.wsclients.invoice.InvoiceRegistryWS;
+import astielau.restaurantportal.wsclients.invoice.InvoiceRegistryWS_Service;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.xml.datatype.DatatypeFactory;
 
 @Stateless
 public class PurchaseDAO {
@@ -20,6 +26,13 @@ public class PurchaseDAO {
     
     @EJB
     OrderItemDAO orderItemDAO;
+    
+    InvoiceRegistryWS invoiceRegistry;
+    
+    public PurchaseDAO(){
+        InvoiceRegistryWS_Service invoiceRegistryWS = new InvoiceRegistryWS_Service();
+        invoiceRegistry = invoiceRegistryWS.getInvoiceRegistryWSPort();
+    }
     
     public List<PurchaseEntity> getAllPurchases(String username){
         try {
@@ -89,12 +102,39 @@ public class PurchaseDAO {
         return null;
     }
     
+    private void registerInvoice(PurchaseEntity purchase){
+        try {
+            InvoiceDTO invoice = new InvoiceDTO();
+            invoice.setEmissorTaxId("321654987");
+            invoice.setEmisorName("RESTaurantPortal");
+            invoice.setClientTaxId(purchase.getClient().getTaxId()); 
+            invoice.setVAT(23);
+            invoice.setEmissionDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar())); 
+            List<InvoiceItemDTO> items = invoice.getItems();
+            InvoiceItemDTO i;
+            for(OrderItemEntity item: purchase.getItems()){
+                i = new InvoiceItemDTO();
+                i.setName(item.getDish().getName());
+                i.setPrice(item.getDish().getPrice());
+                i.setQuantity(item.getQuantity());
+                items.add(i);
+            }
+            
+            invoiceRegistry.registerInvoice(invoice);
+            System.out.println("DONE");
+            
+        } catch ( Exception e ){
+            System.out.println( e.getMessage() );
+        }
+    }
+    
     public void checkout(String username){
         try {
             PurchaseEntity purchase = getUserShoppingCart(username);
             if(purchase != null){ 
                 if(purchase.getTotal() > 0){
                     purchase.pay();
+                    registerInvoice(purchase);
                 }
             } else {
                 //erro

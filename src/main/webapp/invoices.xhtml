@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="/templates/main.xhtml">
+            <ui:define name="main">
+                <div class="container">
+                    <h1>Invoices:</h1>
+                    <h:form>
+                        <c:if test="#{sessionScope.user.getUserType() == 'client'}">
+                            <ul>
+                                <ui:repeat value="#{clientBean.getClientInvoices()}" var="invoice">
+                                    <li>
+                                        <p>
+                                            Emissor: #{invoice.emisorName} #{invoice.emissorTaxId}; 
+                                            Total: $#{invoice.total}; 
+                                            VAT: #{invoice.VAT}%; 
+                                            Date: #{invoice.emissionDate.year}/#{invoice.emissionDate.month}/#{invoice.emissionDate.day}
+                                            <h:commandButton action="#{clientBean.goToInvoice(invoice)}" 
+                                                            value="Details"/>
+                                        </p>
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                            <h:outputText value="Your tax id: #{sessionScope.user.getTaxId()}"
+                                          rendered="#{sessionScope.user.getUserType() == 'client'}"/>
+                        </c:if>
+                        <c:if test="#{sessionScope.user.getUserType() == 'manager'}">
+                            <ul>
+                                <ui:repeat value="#{clientBean.getEmissorInvoices()}" var="invoice">
+                                    <li>
+                                        <p>
+                                            Client Tax Id: #{invoice.clientTaxId}; 
+                                            Total: $#{invoice.total};
+                                            VAT: #{invoice.VAT}%;
+                                            Date: #{invoice.emissionDate.year}/#{invoice.emissionDate.month}/#{invoice.emissionDate.day}
+                                            <h:commandButton action="#{clientBean.goToInvoice(invoice)}" 
+                                                             value="Details"/>
+                                        </p>
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                        </c:if>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

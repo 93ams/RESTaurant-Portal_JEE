@@ -10,6 +10,22 @@
             <ui:define name="main">
                 <div class="container">
                     <h1>Your Meal Checks: </h1>
+                    <h:form>
+                        <ul>
+                            <ui:repeat value="#{clientBean.getClientMealChecks()}" var="check"> 
+                                <li>
+                                    <p> 
+                                        ##{check.getId()}
+                                        Value: #{check.getAmount()} 
+                                        <c:choose><c:when test="#{check.isEndorsable() == true}"> - Endorsable </c:when></c:choose>
+                                        <c:choose><c:when test="#{check.isUsed() == true}"> - Used </c:when></c:choose>
+                                        <h:commandButton action="#{clientBean.useMealCheck(check)}" 
+                                                         value="Use"/>
+                                    </p>
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                    </h:form>
                 </div>
             </ui:define>
         </ui:composition>

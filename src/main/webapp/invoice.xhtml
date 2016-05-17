@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="/templates/main.xhtml">
+            <ui:define name="main">
+                <div class="container">
+                    <h:form>
+                        <h1>Invoice ##{sessionScope.invoice.getId()}</h1>
+                        <c:if test="#{sessionScope.user.getUserType() == 'client'}">
+                            <p> Emissor: #{invoice.emisorName} #{invoice.emissorTaxId} </p> 
+                            <p> Total: $#{invoice.total} </p>
+                            <p> VAT: #{invoice.VAT}% </p>
+                            <p> Date: #{invoice.emissionDate.year}/#{invoice.emissionDate.month}/#{invoice.emissionDate.day} @ #{invoice.emissionDate.hour}:#{invoice.emissionDate.minute}:#{invoice.emissionDate.second} </p>
+                               
+                            <ul>
+                                <ui:repeat value="#{sessionScope.invoice.getItems()}" var="item">
+                                    <li><p>#{item.quantity} #{item.name}s for $#{item.price} each!</p></li>
+                                </ui:repeat>
+                            </ul>
+                        </c:if>
+                        <c:if test="#{sessionScope.user.getUserType() == 'manager'}">
+                            <p> Client Tax Id: #{invoice.clientTaxId} </p> 
+                            <p> Total: $#{invoice.total} </p>
+                            <p> VAT: #{invoice.VAT}% </p>
+                            <p> Date: #{invoice.emissionDate.year}/#{invoice.emissionDate.month}/#{invoice.emissionDate.day} @ #{invoice.emissionDate.hour}:#{invoice.emissionDate.minute}:#{invoice.emissionDate.second} </p>
+                            
+                            <ul>
+                                <ui:repeat value="#{sessionScope.invoice.getItems()}" var="item">
+                                    <li><p>#{item.quantity} #{item.name}s for $#{item.price} each!</p></li>
+                                </ui:repeat>
+                            </ul>
+                        </c:if>
+                        <h:commandButton action="invoices.xhtml?faces-redirect=true" value="Back"/>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

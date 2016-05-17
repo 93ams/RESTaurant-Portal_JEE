@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://lpt-fa2802:8080/InvoiceRegistryService/InvoiceRegistryWS?wsdl" uri="wsdl/lpt-fa2802_8080/InvoiceRegistryService/InvoiceRegistryWS.wsdl"/>
+    <system systemId="http://lpt-fa2802:8080/InvoiceRegistryService/InvoiceRegistryWS?xsd=1" uri="wsdl/lpt-fa2802_8080/InvoiceRegistryService/InvoiceRegistryWS.xsd_1.xsd"/>
+    <system systemId="http://lpt-fa2802:8080/InvoiceRegistryService/InvoiceRegistryWS?xsd=2" uri="wsdl/lpt-fa2802_8080/InvoiceRegistryService/InvoiceRegistryWS.xsd_2.xsd"/>
+    <system systemId="http://localhost:8080/MealCheckService/MealCheckWS?wsdl" uri="wsdl/localhost_8080/MealCheckService/MealCheckWS.wsdl"/>
+    <system systemId="http://localhost:8080/MealCheckService/MealCheckWS?xsd=1" uri="wsdl/localhost_8080/MealCheckService/MealCheckWS.xsd_1.xsd"/>
+</catalog>

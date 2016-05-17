@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="urn:pt:invoiceregisrty:ws" xmlns:ns1="http://invoiceregistryservice.astielau/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="urn:pt:invoiceregisrty:ws">
+
+<xs:import namespace="http://invoiceregistryservice.astielau/" schemaLocation="http://lpt-fa2802:8080/InvoiceRegistryService/InvoiceRegistryWS?xsd=2"/>
+
+<xs:element name="getInvoices" nillable="true" type="ns1:getInvoices"/>
+
+<xs:element name="getRespectiveVAT" nillable="true" type="ns1:getRespectiveVAT"/>
+
+<xs:element name="getRespectiveVATResponse" type="tns:getRespectiveVATResponse"/>
+
+<xs:element name="listInvoices" type="tns:listInvoices"/>
+
+<xs:element name="listInvoicesResponse" type="tns:listInvoicesResponse"/>
+
+<xs:element name="registerInvoice" nillable="true" type="ns1:registerInvoice"/>
+
+<xs:complexType name="listInvoices">
+<xs:sequence>
+<xs:element name="emissorTaxId" type="xs:string" minOccurs="0"/>
+<xs:element name="clientTaxId" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="listInvoicesResponse">
+<xs:sequence>
+<xs:element name="return" type="ns1:invoiceList" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getRespectiveVATResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:double" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

@@ -30,6 +30,17 @@ public class ClientDAO {
         return null;
     }
     
+    public void addCreditToClient( String username, Double amount ){
+        try {
+            ClientEntity client = em.find(ClientEntity.class, username);
+            if(client != null && amount != null)
+               client.setCredit(client.getCredit() + amount);
+        } catch ( Exception e ){
+            System.out.println("Error @ ClientDAO: addCreditToClient");
+            System.out.println( e.getMessage() );
+        }
+    }
+    
     public ClientEntity registerClient( String username, String password, String name, String email, String address, String taxId ){
         try {
             if(getClient(username) == null){
